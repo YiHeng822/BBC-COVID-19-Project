@@ -423,7 +423,7 @@ fit_lr = rfe_lr.fit(X_f, y_f)
 pipeline_lr = Pipeline(steps=[('s',rfe_lr),('m',lr)])
 
 # evaluate model
-cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
 scores_lr = cross_val_score(pipeline_lr, X_f, y_f, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
 
 # RFE with DTC
@@ -433,7 +433,7 @@ fit_dtc = rfe_dtc.fit(X_f, y_f)
 pipeline_dtc = Pipeline(steps=[('s',rfe_dtc),('m',dtc)])
 
 # evaluate model
-cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
 scores_dtc = cross_val_score(pipeline_dtc, X_f, y_f, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
 
 acc = {
