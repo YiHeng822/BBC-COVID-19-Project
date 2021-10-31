@@ -632,7 +632,7 @@ st.altair_chart(alt.Chart(main_dt).mark_bar().encode(
     y='Count:Q',
     column='Type',
     color='States:N'
-).properties(width=300,height=350).interactive())
+).properties(width=300,height=300).interactive())
 
 """Figure 16: Bar chart of actual and predicted counts of Decision Tree
 
@@ -672,7 +672,7 @@ st.altair_chart(alt.Chart(main_rf).mark_bar().encode(
     y='Count:Q',
     column='Type',
     color='States:N'
-).properties(width=300,height=350).interactive())
+).properties(width=300,height=300).interactive())
 
 """Figure 17: Bar chart of actual and predicted counts of Random Forest
 
