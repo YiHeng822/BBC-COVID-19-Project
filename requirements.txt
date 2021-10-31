@@ -1,0 +1,8 @@
+streamlit
+pandas
+matplotlib
+numpy
+sklearn==1.0
+tensorflow
+altair
+functools
