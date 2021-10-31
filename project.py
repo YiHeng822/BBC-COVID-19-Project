@@ -416,16 +416,17 @@ st.info("Note: The feature selection with Logistic Regression takes around 3 min
 X_f = dcv_state.iloc[:, 2:]
 y_f = dcv_state['state']
 
-# RFE with LR
-lr = LogisticRegression()
-rfe_lr = RFE(lr, n_features_to_select=5)
-fit_lr = rfe_lr.fit(X_f, y_f)
-pipeline_lr = Pipeline(steps=[('s',rfe_lr),('m',lr)])
+# # RFE with LR
+# lr = LogisticRegression()
+# rfe_lr = RFE(lr, n_features_to_select=5)
+# fit_lr = rfe_lr.fit(X_f, y_f)
+# pipeline_lr = Pipeline(steps=[('s',rfe_lr),('m',lr)])
 
-# evaluate model
-cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
-scores_lr = cross_val_score(pipeline_lr, X_f, y_f, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
-
+# # evaluate model
+# cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
+# scores_lr = cross_val_score(pipeline_lr, X_f, y_f, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
+scores_lr = 0.139869
+lr_features = ["daily", "cumul_partial", "cumul_full", "cumul_partial_child", "cases_cum"]
 # RFE with DTC
 dtc = DecisionTreeClassifier()
 rfe_dtc = RFE(dtc, n_features_to_select=5)
@@ -433,13 +434,13 @@ fit_dtc = rfe_dtc.fit(X_f, y_f)
 pipeline_dtc = Pipeline(steps=[('s',rfe_dtc),('m',dtc)])
 
 # evaluate model
-cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=2, random_state=1)
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 scores_dtc = cross_val_score(pipeline_dtc, X_f, y_f, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
 
 acc = {
     "Methods": ["Logistic Regression","Decision Tree Classifier"],
-    "Accuracy": [mean(scores_lr), mean(scores_dtc)],
-    "Selected Attributes": [fit_lr.get_feature_names_out(), fit_dtc.get_feature_names_out()]
+    "Accuracy": [scores_lr, mean(scores_dtc)],
+    "Selected Attributes": [lr_features, fit_dtc.get_feature_names_out()]
 }
 pd.set_option('display.max_colwidth', None)
 st.dataframe(pd.DataFrame(acc))
