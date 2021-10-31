@@ -3,5 +3,4 @@ pandas
 matplotlib
 numpy
 scikit-learn==1.0.0
-tensorflow-cpu
 altair

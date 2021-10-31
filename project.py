@@ -35,11 +35,6 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Dropout
-
 import warnings
 warnings.filterwarnings('ignore')
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -688,116 +683,118 @@ In conclusion, the random forest classifier can be used to predict a state at ri
 
 LSTM have been used to predict the number of vaccination from 23/10/2021 - 30/11/2021 to predict if Malaysia current vaccination rate allow it to reach herd immunity by 30/11/2021. LSTM is used in this cased because LSTM is good for time series prediction using previous data. In our model, we use the past 60 days vaccination data to predict the next day vaccination number.
 """
-st.info("Note: The LSTM model takes around 3 minutes to train.")
+# st.info("Note: The LSTM model takes around 3 minutes to train.")
 
-vac_train = vax_malaysia[vax_malaysia['date'] < "2021-08-24"]
-vac_test = vax_malaysia[vax_malaysia['date']>= "2021-08-24"]
+# vac_train = vax_malaysia[vax_malaysia['date'] < "2021-08-24"]
+# vac_test = vax_malaysia[vax_malaysia['date']>= "2021-08-24"]
 
-training_set = vac_train.iloc[:, 8: 9].values
+# training_set = vac_train.iloc[:, 8: 9].values
 
-sc = MinMaxScaler(feature_range = (0, 1))
-training_set_scaled = sc.fit_transform(training_set)
+# sc = MinMaxScaler(feature_range = (0, 1))
+# training_set_scaled = sc.fit_transform(training_set)
 
-X_train = []
-y_train = []
+# X_train = []
+# y_train = []
 
-for i in range(60, len(training_set_scaled)):
-    X_train.append(training_set_scaled[i-60: i, 0])
-    y_train.append(training_set_scaled[i, 0])
+# for i in range(60, len(training_set_scaled)):
+#     X_train.append(training_set_scaled[i-60: i, 0])
+#     y_train.append(training_set_scaled[i, 0])
 
-X_train, y_train = np.array(X_train), np.array(y_train)
+# X_train, y_train = np.array(X_train), np.array(y_train)
 
-X_train = np.reshape(X_train, newshape = (X_train.shape[0], X_train.shape[1], 1))
+# X_train = np.reshape(X_train, newshape = (X_train.shape[0], X_train.shape[1], 1))
 
 
-regressor = Sequential()
+# regressor = Sequential()
 
-regressor.add(LSTM(units = 200, return_sequences = True, input_shape = (X_train.shape[1], 1)))
-regressor.add(Dropout(rate = 0.2))
+# regressor.add(LSTM(units = 200, return_sequences = True, input_shape = (X_train.shape[1], 1)))
+# regressor.add(Dropout(rate = 0.2))
 
-regressor.add(LSTM(units = 200, return_sequences = True))
-regressor.add(Dropout(rate = 0.2))
+# regressor.add(LSTM(units = 200, return_sequences = True))
+# regressor.add(Dropout(rate = 0.2))
 
-regressor.add(LSTM(units = 200, return_sequences = True))
-regressor.add(Dropout(rate = 0.2))
+# regressor.add(LSTM(units = 200, return_sequences = True))
+# regressor.add(Dropout(rate = 0.2))
 
-regressor.add(LSTM(units = 200, return_sequences = False))
-regressor.add(Dropout(rate = 0.2))
+# regressor.add(LSTM(units = 200, return_sequences = False))
+# regressor.add(Dropout(rate = 0.2))
 
-regressor.add(Dense(1))
+# regressor.add(Dense(1))
 
-regressor.summary()
+# regressor.summary()
 
-regressor.compile(loss='mean_squared_error', optimizer='adam')
-regressor.fit(X_train, y_train, epochs = 100,batch_size=32)
+# regressor.compile(loss='mean_squared_error', optimizer='adam')
+# regressor.fit(X_train, y_train, epochs = 100,batch_size=32)
 
-real_vac_count = vac_test.iloc[:, 8: 9].values
-dataset_total = pd.concat((vac_train['cumul_full'], vac_test['cumul_full']), axis = 0)
+# real_vac_count = vac_test.iloc[:, 8: 9].values
+# dataset_total = pd.concat((vac_train['cumul_full'], vac_test['cumul_full']), axis = 0)
 
-inputs = dataset_total[len(dataset_total) - len(vac_test) - 60:].values
-#reshape data to only have 1 col
-inputs = inputs.reshape(-1, 1)
+# inputs = dataset_total[len(dataset_total) - len(vac_test) - 60:].values
+# #reshape data to only have 1 col
+# inputs = inputs.reshape(-1, 1)
 
-#scale input
-inputs = sc.transform(inputs)
+# #scale input
+# inputs = sc.transform(inputs)
 
-X_test = []
-y_test = []
-for i in range(60, len(inputs)):
-    X_test.append(inputs[i-60: i, 0])
-    y_test.append(inputs[i, 0])
+# X_test = []
+# y_test = []
+# for i in range(60, len(inputs)):
+#     X_test.append(inputs[i-60: i, 0])
+#     y_test.append(inputs[i, 0])
 
-X_test, y_test = np.array(X_test), np.array(y_test)
+# X_test, y_test = np.array(X_test), np.array(y_test)
 
-X_test = np.reshape(X_test, newshape = (X_test.shape[0], X_test.shape[1], 1))
-predicted_vac_count = regressor.predict(X_test)
+# X_test = np.reshape(X_test, newshape = (X_test.shape[0], X_test.shape[1], 1))
+# predicted_vac_count = regressor.predict(X_test)
 
-predicted_vac_count = sc.inverse_transform(predicted_vac_count)
+# predicted_vac_count = sc.inverse_transform(predicted_vac_count)
 
-plt.plot(real_vac_count, color = 'red', label = 'Real Vaccination Number')
-plt.plot(predicted_vac_count, color = 'blue', label = 'Predicted Vaccination Number')
-fig18 = plt.plot()
-plt.title('Vaccination Number Prediction')
-plt.xlabel('Time')
-plt.ylabel('Vaccination Number')
-plt.legend()
-plt.show()
-st.pyplot(fig18)
-
+# plt.plot(real_vac_count, color = 'red', label = 'Real Vaccination Number')
+# plt.plot(predicted_vac_count, color = 'blue', label = 'Predicted Vaccination Number')
+# fig18 = plt.plot()
+# plt.title('Vaccination Number Prediction')
+# plt.xlabel('Time')
+# plt.ylabel('Vaccination Number')
+# plt.legend()
+# plt.show()
+# st.pyplot(fig18)
+st.image("./picture/18.png")
 """Figure 18: Real Vaccination Number vs Predicted Vaccnination Number(24/8/2021 - 22/10/2021)
 
 Figure 18 above shows the real vaccination number from 24/8/2021 - 22/10/2021. The red line indicates the real vaccination number and the blue line is the predicted value of vaccination number by our model. Our model have been tweaked a few times to reach this accuracy. 
 """
 
-dataset_predict = pd.DataFrame(vac_test['cumul_full'][-60:])
-X_predict = []
-y_predict= []
+# dataset_predict = pd.DataFrame(vac_test['cumul_full'][-60:])
+# X_predict = []
+# y_predict= []
 
-inputs_predict = dataset_predict.values
-inputs_predict = inputs_predict.reshape(-1, 1)
-inputs_predict = sc.transform(inputs_predict)
+# inputs_predict = dataset_predict.values
+# inputs_predict = inputs_predict.reshape(-1, 1)
+# inputs_predict = sc.transform(inputs_predict)
 
-for i in range(39):
-    X_predict.append(inputs_predict[i: len(inputs_predict)+i, 0])
-    X_predict = np.array(X_predict)
-    X_predict = np.reshape(X_predict, newshape = (1, 60, 1))
-    nov_vac_count = regressor.predict(X_predict)
-    inputs_predict = np.append(inputs_predict, nov_vac_count)
-    inputs_predict = inputs_predict.reshape(-1, 1)
-    X_predict = []
+# for i in range(39):
+#     X_predict.append(inputs_predict[i: len(inputs_predict)+i, 0])
+#     X_predict = np.array(X_predict)
+#     X_predict = np.reshape(X_predict, newshape = (1, 60, 1))
+#     nov_vac_count = regressor.predict(X_predict)
+#     inputs_predict = np.append(inputs_predict, nov_vac_count)
+#     inputs_predict = inputs_predict.reshape(-1, 1)
+#     X_predict = []
     
-inputs_predict = sc.inverse_transform(inputs_predict)
+# inputs_predict = sc.inverse_transform(inputs_predict)
 
-fig19a = plt.plot(inputs_predict, color = 'green', label = 'November Vaccination Number')
-fig19b = plt.plot(real_vac_count, color = 'red', label = 'Real Vaccination Number')
-fig19c = plt.plot(predicted_vac_count, color = 'blue', label = 'Predicted Vaccination Number')
+# fig19a = plt.plot(inputs_predict, color = 'green', label = 'November Vaccination Number')
+# fig19b = plt.plot(real_vac_count, color = 'red', label = 'Real Vaccination Number')
+# fig19c = plt.plot(predicted_vac_count, color = 'blue', label = 'Predicted Vaccination Number')
 
-plt.title('Vaccination Number Prediction')
-plt.xlabel('Time')
-plt.ylabel('Vaccination Number')
-plt.legend()
-plt.show()
-st.pyplot()
+# plt.title('Vaccination Number Prediction')
+# plt.xlabel('Time')
+# plt.ylabel('Vaccination Number')
+# plt.legend()
+# plt.show()
+# st.pyplot()
+st.image("./picture/19.png")
+
 """Figure 19: Predicting on November Vaccination Number 
 
 The Figure 19 above shows the predicted November vaccination number based on our model. The green line indicates the predicted number on vaccination from 23/10/2021 - 30/11/2021.
