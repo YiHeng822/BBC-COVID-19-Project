@@ -410,7 +410,7 @@ st.dataframe(dcv_state.head())
 We have chosen to use a wrapper method that utilizes a machine learning algorithm as the evaluation criteria. Recursive feature elimination (RFE) for its efficiency and simplicity. Two classification models are used for evaluation, which is Decision Tree Classifier and Logistic Regression. To evaluate their performance, accuracy is computed with cross-validation on both models.
 
 """
-st.info("Note: The feature selection with Logistic Regression takes around 3 minutes to execute.")
+st.info("Note: The feature selection might take awhile to execute.")
 
 #  Prepare the label and attributes
 X_f = dcv_state.iloc[:, 2:]
@@ -476,7 +476,7 @@ st.altair_chart(alt.Chart(dfc1).mark_circle(size = 40).encode(
    tooltip = ['state', 'cases_new', 'deaths_new'],
    opacity = alt.condition(selection, alt.value(1), alt.value(0.05))
 ).properties(
-   height = 350, width = 750
+   height = 350, width = 775
 ).add_selection(
    selection,
    scales
@@ -540,7 +540,7 @@ st.altair_chart(alt.Chart(dfc2).mark_circle(size = 40).encode(
    tooltip = ['state', 'date:T', 'daily:Q'],
    opacity = alt.condition(selection, alt.value(1), alt.value(0.05))
 ).properties(
-   height = 400, width = 750
+   height = 400, width = 775
 ).add_selection(
    selection,
    scales
