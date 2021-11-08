@@ -407,7 +407,7 @@ st.dataframe(dcv_state.head())
 
 """Data Frame 10: Data frame with computed 'cases_cum' and 'deaths_cum'
 
-We have chosen to use a wrapper method that utilizes a machine learning algorithm as the evaluation criteria. Recursive feature elimination (RFE) for its efficiency and simplicity. Two classification models are used for evaluation, which is Decision Tree Classifier and Logistic Regression. To evaluate their performance, accuracy is computed with cross-validation on both models.
+We have chosen to use a wrapper method that utilizes a machine learning algorithm as the evaluation criteria. Recursive feature elimination (RFE) is chosen for its efficiency and simplicity. Two classification models are used for evaluation, which is Decision Tree Classifier and Logistic Regression. To evaluate their performance, accuracy is computed with cross-validation on both models.
 
 """
 st.info("Note: The feature selection might take awhile to execute.")
@@ -447,7 +447,7 @@ st.dataframe(pd.DataFrame(acc))
 
 """Data Frame 11: Performance comparision of feature selection models and their selected columns
 
-Based on the result above, it can be noticed that the decision tree classifier outperformed logistic regression in predicting the states given the values _cases_new, cumul_partial, cumul_full, deaths_cum, cases_cum_. with 88% of accuracy. So, columns selected by the decision tree classifier are retained as the feature for model building and testing.
+Based on the result above, it can be noticed that the decision tree classifier outperformed logistic regression in predicting the states given the values _cases_new, cumul_partial, cumul_full, deaths_cum, cases_cum_ with 88% of accuracy. So, columns selected by the decision tree classifier are retained as the feature for model building and testing.
 
 ## Machine Learning Algorithm
 
