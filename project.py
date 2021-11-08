@@ -823,13 +823,12 @@ dt_reg_mse = metrics.mean_squared_error(y_test, dt_pred)
 dt_reg_mae = metrics.mean_absolute_error(y_test, dt_pred)
 dt_reg_r2 = metrics.r2_score(y_test, dt_pred)
 
-
-df_temp = pd.DataFrame(mlr_pred,columns=['MLR Predicted Cases'])
+df_temp = pd.DataFrame(mlr_pred,columns=['LR Predicted Cases'])
 df_temp2 = pd.DataFrame(y_test.values,columns=['Real Cases'])
 df_temp3 = pd.DataFrame(dt_pred,columns=['DT Predicted Cases'])
 df_concat = pd.concat([df_temp2,df_temp, df_temp3],axis=1)
 
-model_name = ['Multiple Linear Regression','Decision Tree Regression']
+model_name = ['Linear Regression','Decision Tree Regression']
 data = {"Mean squared error": [mlr_reg_mse, dt_reg_mse],
         "Mean absolute error": [mlr_reg_mae, dt_reg_mae],
         "R^2 score" :[mlr_reg_r2, dt_reg_r2]}
@@ -850,5 +849,5 @@ st.pyplot()
 
 """Figure 20: Real cases vs predicted cases by our regression models
 
-Blue line shows the real number of cases, orange line shows the predicted number of cases by Multiple Linear Regression model and green line shows the predicted number of cases by Decision Tree Regression model.
+Blue line shows the real number of cases, orange line shows the predicted number of cases by Linear Regression model and green line shows the predicted number of cases by Decision Tree Regression model.
 """
